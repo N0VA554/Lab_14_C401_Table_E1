@@ -28,5 +28,27 @@ class RetrievalEvaluator:
         Chạy eval cho toàn bộ bộ dữ liệu.
         Dataset cần có trường 'expected_retrieval_ids' và Agent trả về 'retrieved_ids'.
         """
-        # Placeholder logic
-        return {"avg_hit_rate": 0.85, "avg_mrr": 0.72}
+        if not dataset:
+            return {"avg_hit_rate": 0.0, "avg_mrr": 0.0}
+            
+        total_hit_rate = 0.0
+        total_mrr = 0.0
+        n_samples = len(dataset)
+        
+        for item in dataset:
+            # Lấy ra danh sách các document ID dự kiến và thực tế (nếu không có thì trả về mảng rỗng)
+            expected = item.get("expected_retrieval_ids", [])
+            retrieved = item.get("retrieved_ids", [])
+            
+            # Cộng dồn điểm cho từng dòng dữ liệu
+            total_hit_rate += self.calculate_hit_rate(expected, retrieved)
+            total_mrr += self.calculate_mrr(expected, retrieved)
+            
+        # Tính điểm trung bình toàn bộ Dataset
+        avg_hit_rate = total_hit_rate / n_samples
+        avg_mrr = total_mrr / n_samples
+        
+        return {
+            "avg_hit_rate": avg_hit_rate,
+            "avg_mrr": avg_mrr
+        }
