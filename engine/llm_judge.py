@@ -10,9 +10,8 @@ dotenv.load_dotenv()
 class LLMJudge:
     def __init__(self):
         # Khởi tạo 2 client thông qua chuẩn OpenAI tương thích
-        self.gemini_client = AsyncOpenAI(
-            api_key=os.environ.get("GEMINI_API_KEY", "dummy_key"),
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+        self.openai_client = AsyncOpenAI(
+            api_key=os.environ.get("OPENAI_API_KEY", "dummy_key")
         )
         self.deepseek_client = AsyncOpenAI(
             api_key=os.environ.get("DEEPSEEK_API_KEY", "dummy_key"),
@@ -60,24 +59,24 @@ Câu trả lời của hệ thống: {answer}
 
     async def evaluate_multi_judge(self, question: str, answer: str, ground_truth: str) -> Dict[str, Any]:
         """
-        EXPERT TASK: Gọi 2 model (Gemini 2.5 flash và Deepseek V3).
+        EXPERT TASK: Gọi 2 model (GPT-3.5 Turbo và Deepseek V3).
         Tính toán sự sai lệch. Nếu lệch > 1 điểm, cần logic xử lý.
         """
         # Chạy song song 2 request
-        gemini_task = self._evaluate_single(
-            self.gemini_client, "gemini-2.5-flash", question, answer, ground_truth
+        openai_task = self._evaluate_single(
+            self.openai_client, "gpt-3.5-turbo", question, answer, ground_truth
         )
         deepseek_task = self._evaluate_single(
             self.deepseek_client, "deepseek-chat", question, answer, ground_truth # deepseek-chat == V3
         )
         
-        score_a, score_b = await asyncio.gather(gemini_task, deepseek_task)
+        score_a, score_b = await asyncio.gather(openai_task, deepseek_task)
         
         avg_score = (score_a + score_b) / 2
         
         # Logic xử lý sai lệch lớn hơn 1 điểm
         if abs(score_a - score_b) > 1:
-            print(f"⚠️ Cảnh báo: Các Giám khảo có độ lệch lớn (Gemini: {score_a}, Deepseek: {score_b}).")
+            print(f"⚠️ Cảnh báo: Các Giám khảo có độ lệch lớn (GPT-3.5: {score_a}, Deepseek: {score_b}).")
             # Nếu sai lệch > 1, lấy điểm thấp hơn để đánh giá khắt khe (hoặc có thể dùng LLM thứ 3 để trọng tài)
             avg_score = min(score_a, score_b)
             
@@ -93,7 +92,7 @@ Câu trả lời của hệ thống: {answer}
             "final_score": avg_score,
             "agreement_rate": agreement,
             "individual_scores": {
-                "gemini-2.5-flash": score_a,
+                "gpt-3.5-turbo": score_a,
                 "deepseek-v3": score_b
             }
         }
@@ -119,11 +118,11 @@ Câu trả lời của hệ thống: {answer}
     async def check_position_bias(self, response_a: str, response_b: str) -> Dict[str, Any]:
         """
         Nâng cao: Thực hiện đổi chỗ response A và B để xem Judge có thiên vị vị trí không.
-        Áp dụng cho CẢ 2 mô hình (Gemini và Deepseek) để so sánh.
+        Áp dụng cho CẢ 2 mô hình (GPT-3.5 và Deepseek) để so sánh.
         """
-        # Test Gemini
-        g_task_1 = self._compare_responses(self.gemini_client, "gemini-2.5-flash", response_a, response_b)
-        g_task_2 = self._compare_responses(self.gemini_client, "gemini-2.5-flash", response_b, response_a)
+        # Test GPT-3.5 Turbo
+        g_task_1 = self._compare_responses(self.openai_client, "gpt-3.5-turbo", response_a, response_b)
+        g_task_2 = self._compare_responses(self.openai_client, "gpt-3.5-turbo", response_b, response_a)
         
         # Test Deepseek
         d_task_1 = self._compare_responses(self.deepseek_client, "deepseek-chat", response_a, response_b)
@@ -155,6 +154,6 @@ Câu trả lời của hệ thống: {answer}
             }
 
         return {
-            "gemini": _analyze_bias(g_res_1, g_res_2),
+            "gpt_3_5_turbo": _analyze_bias(g_res_1, g_res_2),
             "deepseek": _analyze_bias(d_res_1, d_res_2)
         }
