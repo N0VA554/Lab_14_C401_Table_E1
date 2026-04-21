@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "version": "Agent_V2_Optimized",
+    "total": 2,
+    "timestamp": "2026-04-21 17:08:01"
+  },
+  "metrics": {
+    "avg_score": 4.5,
+    "avg_latency": 0.10049129993421957,
+    "hit_rate": 1.0,
+    "agreement_rate": 0.8
+  },
+  "raw_results": [
+    {
+      "case": {
+        "question": "VinUni nằm ở đâu?",
+        "ground_truth": "Gia Lâm, Hà Nội"
+      },
+      "response": "Câu trả lời cho: VinUni nằm ở đâu?",
+      "latency": 0.10048699995968491,
+      "ragas": {
+        "faithfulness": 0.9,
+        "relevancy": 0.8,
+        "retrieval": {
+          "hit_rate": 1.0,
+          "mrr": 0.5
+        }
+      },
+      "judge": {
+        "final_score": 4.5,
+        "agreement_rate": 0.8,
+        "reasoning": "Câu trả lời đạt yêu cầu."
+      }
+    },
+    {
+      "case": {
+        "question": "Làm thế nào để đăng ký học?",
+        "ground_truth": "Qua cổng tuyển sinh trực tuyến"
+      },
+      "response": "Câu trả lời cho: Làm thế nào để đăng ký học?",
+      "latency": 0.10049559990875423,
+      "ragas": {
+        "faithfulness": 0.9,
+        "relevancy": 0.8,
+        "retrieval": {
+          "hit_rate": 1.0,
+          "mrr": 0.5
+        }
+      },
+      "judge": {
+        "final_score": 4.5,
+        "agreement_rate": 0.8,
+        "reasoning": "Câu trả lời đạt yêu cầu."
+      }
+    }
+  ]
+}
