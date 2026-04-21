@@ -3,8 +3,5 @@ __pycache__/
 *.pyc
 .DS_Store
 reports/
-<<<<<<< HEAD
-# data/golden_set.jsonl
-=======
 venv/
->>>>>>> e77516cfc94b1bcc98a558de428294d6c53be491
+
