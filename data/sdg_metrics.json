@@ -1,0 +1,47 @@
+{
+  "retrieval_eval": {
+    "Easy": {
+      "total_cases": 10,
+      "cases_with_gt_id": 10,
+      "hit_rate": 100.0,
+      "mrr": 1.0
+    },
+    "Hard": {
+      "total_cases": 10,
+      "cases_with_gt_id": 10,
+      "hit_rate": 100.0,
+      "mrr": 1.0
+    },
+    "Medium": {
+      "total_cases": 10,
+      "cases_with_gt_id": 10,
+      "hit_rate": 100.0,
+      "mrr": 1.0
+    },
+    "Tricky (Adversarial)": {
+      "total_cases": 10,
+      "cases_with_gt_id": 10,
+      "hit_rate": 100.0,
+      "mrr": 1.0
+    },
+    "Very Hard": {
+      "total_cases": 7,
+      "cases_with_gt_id": 7,
+      "hit_rate": 100.0,
+      "mrr": 1.0
+    }
+  },
+  "sdg_summary": {
+    "total_cases": 47,
+    "total_with_gt_id": 47,
+    "overall_hit_rate": 100.0,
+    "overall_mrr": 1.0,
+    "distribution": {
+      "Easy": 10,
+      "Medium": 10,
+      "Hard": 10,
+      "Very Hard": 7,
+      "Tricky (Adversarial)": 10
+    }
+  }
+}
