@@ -73,7 +73,7 @@ Câu trả lời 2: {response_2}
         self, question: str, answer: str, ground_truth: str
     ) -> Dict[str, Any]:
         """
-        Chạy song song 2 judges (OpenAI + Deepseek).
+        Chạy song song 2 judges (OpenAI gpt-4o-mini + Deepseek deepseek-chat).
         Agreement rate: 1.0 nếu đồng điểm, 0.5 nếu lệch 1, 0.0 nếu lệch >1.
         Khi lệch >1: lấy điểm thấp hơn (đánh giá khắt khe).
         """
@@ -89,7 +89,7 @@ Câu trả lời 2: {response_2}
         diff = abs(score_a - score_b)
 
         if diff == 0:
-            final_score = score_a
+            final_score = float(score_a)
             agreement = 1.0
         elif diff == 1:
             final_score = (score_a + score_b) / 2
